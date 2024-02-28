@@ -1,95 +1,53 @@
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
+import FacekiSDK from "@faceki/blaze-kyc-react-sdk";
 
 export default function Home() {
+
+  const sdkConfig = {
+    clientId: "ghsmgp6vimg9gkmlju2arrl5b",
+    clientSecret: "dpojgcek6ot5kk4ikpqaqjdg9mv9ct6m0ccr855sv6iqmi5qfhj",
+    record_identifier: "123456",
+    workflowId: "4ebd7d52-3c30-4484-958e-4ff46d181f35",
+    theme: {
+      mainColor: "#FF5733",
+      secondaryColor: "#2ECC71",
+      backgroundColor: "#F4F4F4",
+      cardBackgroundColor: "#FFFFFF",
+      headingTextColor: "#333333",
+      secondaryTextColor: "#777777",
+      secondaryBorderColor: "#DDDDDD",
+      iconFillColor: "#555555",
+      iconBorderColor: "#888888",
+      iconTextColor: "#FFFFFF",
+      logo: "https://logowik.com/content/uploads/images/neom5478.jpg",
+      disableGuidance: false,
+      failedText: "Operation failed. Please try again.",
+      successText: "Operation successful!",
+      buttonbg: "#F8B427",
+      textBg: "#EFEFEF",
+      verificationProcessingText: "Processing verification...",
+    },
+    onSuccess: (data) => {
+      console.log("SDK operation successful:", data);
+      fetch("http://localhost:1344/",{
+        method: "POST",
+        body: JSON.stringify(sdkConfig.record_identifier) // Convert data to JSON string
+      })
+      .then(response => response.json()) // Parse JSON response
+      .then(data => console.log(data)) // Handle data
+      .catch(error => console.error('Error:', error));
+    },
+    onFail: (data) => {
+      console.error("SDK operation failed:", data);
+    },
+  };
+
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+    <main> 
+        <FacekiSDK {...sdkConfig} />
     </main>
   );
 }
